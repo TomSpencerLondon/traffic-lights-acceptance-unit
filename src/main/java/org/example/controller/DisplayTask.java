@@ -1,22 +1,22 @@
 package org.example.controller;
 
-import org.example.io.ConsolePrinter;
+import org.example.io.IOHandler;
 import org.example.timer.SystemUpdateListener;
 
 import java.io.IOException;
 
 public class DisplayTask implements SystemUpdateListener {
 
-    private final ConsolePrinter printer;
+    private final IOHandler ioHandler;
 
-    public DisplayTask(ConsolePrinter printer) {
-        this.printer = printer;
+    public DisplayTask(IOHandler ioHandler) {
+        this.ioHandler = ioHandler;
     }
 
     @Override
     public void onSystemUpdate(int secondsPassed, String systemInfo) {
         try {
-            printer.clearAndPrint(systemInfo);
+            ioHandler.clearAndPrint(systemInfo);
         } catch (IOException | InterruptedException e) {
             handleException(e);
         }

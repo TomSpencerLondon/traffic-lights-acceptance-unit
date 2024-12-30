@@ -49,37 +49,6 @@ public class TrafficLights implements TrafficLightsInterface {
         return roads.removeIf(r -> r.getName().equals(road));
     }
 
-    @Override
-    public void initialize(int roadCapacity, int interval) { }
-
-    public String addRoadMessage(String road) {
-        return addRoad(road) ? road + " added" : "The queue is full";
-    }
-
-    public String deleteRoadMessage() {
-        if (roads.isEmpty()) {
-            return "The queue is empty";
-        }
-        var message = "%s deleted".formatted(roads.getFirst().getName());
-        adjustCountersIfClosedRoadDeleted();
-        roads.removeFirst();
-        return message;
-    }
-
-    /**
-     * Adjust countdowns if a closed road is deleted and there is an open road left.
-     */
-    private void adjustCountersIfClosedRoadDeleted() {
-        if (roads.stream().noneMatch(road -> road.getSecondsCounter() <= interval)) {
-            return;
-        }
-        var secondsOnRoadToDelete = roads.getFirst().getSecondsCounter();
-        if (secondsOnRoadToDelete > interval) { // Road is closed
-            roads.stream()
-                    .filter(road -> road.getSecondsCounter() > secondsOnRoadToDelete)
-                    .forEach(Road::subtractInterval);
-        }
-    }
 
     public void notifySecondPassed() {
         roads.forEach(Road::countDown);

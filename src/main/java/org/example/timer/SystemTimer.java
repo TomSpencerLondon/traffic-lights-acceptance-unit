@@ -54,19 +54,4 @@ public class SystemTimer implements SystemTimerInterface {
         timer.cancel();
         timer.purge();
     }
-
-    @Override
-    public void addSecondsPassed() {
-        secondsPassed++;
-    }
-
-    @Override
-    public void notifySecondPassed() {
-        trafficLights.notifySecondPassed();
-    }
-
-    @Override
-    public boolean isSystemActive() {
-        return inSystemState;
-    }
 }
