@@ -1,12 +1,11 @@
 package org.example;
 
-import org.example.controller.DisplayTask;
-import org.example.controller.MainMenuController;
-import org.example.io.IOHandler;
-import org.example.model.TrafficLights;
-import org.example.model.TrafficLightsInterface;
-import org.example.timer.SystemTimer;
-import org.example.timer.SystemTimerInterface;
+import org.example.hexagon.application.DisplayTask;
+import org.example.adapter.in.console.MainMenuController;
+import org.example.hexagon.application.IOHandler;
+import org.example.hexagon.domain.TrafficLights;
+import org.example.hexagon.application.SystemTimer;
+import org.example.hexagon.application.port.SystemTimerInterface;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -22,7 +21,7 @@ public class Main {
         int roadCapacity = queryNumber("Input the number of roads:", ioHandler);
         int interval = queryNumber("Input the interval:", ioHandler);
 
-        TrafficLightsInterface trafficLights = new TrafficLights(roadCapacity, interval);
+        TrafficLights trafficLights = new TrafficLights(roadCapacity, interval);
         DisplayTask displayTask = new DisplayTask(ioHandler);
         SystemTimerInterface systemTimer = new SystemTimer(trafficLights, displayTask);
 

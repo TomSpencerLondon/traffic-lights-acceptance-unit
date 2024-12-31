@@ -1,4 +1,4 @@
-package org.example.io;
+package org.example.hexagon.application;
 
 import java.io.IOException;
 import java.io.PrintStream;

@@ -1,19 +1,21 @@
-package org.example.timer;
+package org.example.hexagon.application;
 
-import org.example.model.TrafficLightsInterface;
+import org.example.hexagon.application.port.SystemTimerInterface;
+import org.example.hexagon.application.port.SystemUpdateListener;
+import org.example.hexagon.domain.TrafficLights;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SystemTimer implements SystemTimerInterface {
 
-    private final TrafficLightsInterface trafficLights;
+    private final TrafficLights trafficLights;
     private final Timer timer;
-    private final SystemUpdateListener listener; // Listener for updates
+    private final SystemUpdateListener listener;
     private boolean inSystemState = false;
     private int secondsPassed;
 
-    public SystemTimer(TrafficLightsInterface trafficLights, SystemUpdateListener listener) {
+    public SystemTimer(TrafficLights trafficLights, SystemUpdateListener listener) {
         this.trafficLights = trafficLights;
         this.listener = listener;
         this.timer = new Timer("QueueThread", true);

@@ -1,11 +1,12 @@
-package org.example.controller;
+package org.example.adapter.in.console;
 
 import java.io.IOException;
 import java.util.Map;
 
-import org.example.io.IOHandler;
-import org.example.model.TrafficLightsInterface;
-import org.example.timer.SystemTimerInterface;
+import org.example.hexagon.application.IOHandler;
+import org.example.hexagon.domain.Choice;
+import org.example.hexagon.domain.TrafficLights;
+import org.example.hexagon.application.port.SystemTimerInterface;
 public class MainMenuController {
 
     public static final String EXPECTED_INPUT = "[0-3]";
@@ -17,10 +18,10 @@ public class MainMenuController {
             0. Quit""";
 
     private final IOHandler ioHandler;
-    private final TrafficLightsInterface trafficLights;
+    private final TrafficLights trafficLights;
     private final SystemTimerInterface systemTimer;
 
-    public MainMenuController(IOHandler ioHandler, TrafficLightsInterface trafficLights, SystemTimerInterface systemTimer) {
+    public MainMenuController(IOHandler ioHandler, TrafficLights trafficLights, SystemTimerInterface systemTimer) {
         this.ioHandler = ioHandler;
         this.trafficLights = trafficLights;
         this.systemTimer = systemTimer;

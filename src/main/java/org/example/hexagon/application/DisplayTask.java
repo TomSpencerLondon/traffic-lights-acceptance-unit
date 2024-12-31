@@ -1,7 +1,6 @@
-package org.example.controller;
+package org.example.hexagon.application;
 
-import org.example.io.IOHandler;
-import org.example.timer.SystemUpdateListener;
+import org.example.hexagon.application.port.SystemUpdateListener;
 
 import java.io.IOException;
 

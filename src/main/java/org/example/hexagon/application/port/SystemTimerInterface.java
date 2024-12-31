@@ -1,4 +1,4 @@
-package org.example.timer;
+package org.example.hexagon.application.port;
 
 public interface SystemTimerInterface {
     void setInSystemState(boolean state);
