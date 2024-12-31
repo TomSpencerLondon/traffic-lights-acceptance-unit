@@ -2,21 +2,21 @@ package org.example.hexagon.application;
 
 import org.example.hexagon.application.port.SystemTimerInterface;
 import org.example.hexagon.application.port.SystemUpdateListener;
-import org.example.hexagon.domain.TrafficLights;
+import org.example.hexagon.domain.TrafficCoordinator;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SystemTimer implements SystemTimerInterface {
 
-    private final TrafficLights trafficLights;
+    private final TrafficCoordinator trafficCoordinator;
     private final Timer timer;
     private final SystemUpdateListener listener;
     private boolean inSystemState = false;
     private int secondsPassed;
 
-    public SystemTimer(TrafficLights trafficLights, SystemUpdateListener listener) {
-        this.trafficLights = trafficLights;
+    public SystemTimer(TrafficCoordinator trafficCoordinator, SystemUpdateListener listener) {
+        this.trafficCoordinator = trafficCoordinator;
         this.listener = listener;
         this.timer = new Timer("QueueThread", true);
         this.timer.scheduleAtFixedRate(new TimerTask() {
@@ -29,7 +29,7 @@ public class SystemTimer implements SystemTimerInterface {
 
     private void updateSystemTime() {
         secondsPassed++;
-        trafficLights.notifySecondPassed();
+        trafficCoordinator.notifySecondPassed();
         if (inSystemState) {
             notifyListener();
         }
@@ -48,7 +48,7 @@ public class SystemTimer implements SystemTimerInterface {
     @Override
     public String getSystemInfo() {
         return String.format("! %ds. have passed since system startup !\n! Number of roads: %d !\n! Interval: %d !\n\n%s\n\n! Press \"Enter\" to open menu !",
-                secondsPassed, trafficLights.getRoadCapacity(), trafficLights.getInterval(), trafficLights.getRoadsLines());
+                secondsPassed, trafficCoordinator.getRoadCapacity(), trafficCoordinator.getInterval(), trafficCoordinator.getRoadsLines());
     }
 
     @Override

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TrafficLights {
+public class TrafficCoordinator {
 
     private final List<Road> roads = new ArrayList<>();
     private final int roadCapacity;
     private final int interval;
     private int remainingInInterval;
 
-    public TrafficLights(int roadCapacity, int interval) {
+    public TrafficCoordinator(int roadCapacity, int interval) {
         this.roadCapacity = roadCapacity;
         this.interval = interval;
     }

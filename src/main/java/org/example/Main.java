@@ -3,7 +3,7 @@ package org.example;
 import org.example.hexagon.application.DisplayTask;
 import org.example.adapter.in.console.MainMenuController;
 import org.example.hexagon.application.IOHandler;
-import org.example.hexagon.domain.TrafficLights;
+import org.example.hexagon.domain.TrafficCoordinator;
 import org.example.hexagon.application.SystemTimer;
 import org.example.hexagon.application.port.SystemTimerInterface;
 
@@ -21,11 +21,11 @@ public class Main {
         int roadCapacity = queryNumber("Input the number of roads:", ioHandler);
         int interval = queryNumber("Input the interval:", ioHandler);
 
-        TrafficLights trafficLights = new TrafficLights(roadCapacity, interval);
+        TrafficCoordinator trafficCoordinator = new TrafficCoordinator(roadCapacity, interval);
         DisplayTask displayTask = new DisplayTask(ioHandler);
-        SystemTimerInterface systemTimer = new SystemTimer(trafficLights, displayTask);
+        SystemTimerInterface systemTimer = new SystemTimer(trafficCoordinator, displayTask);
 
-        new MainMenuController(ioHandler, trafficLights, systemTimer).start();
+        new MainMenuController(ioHandler, trafficCoordinator, systemTimer).start();
     }
 
     private static int queryNumber(String queryMessage, IOHandler ioHandler) {
