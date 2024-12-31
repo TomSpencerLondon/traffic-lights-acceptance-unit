@@ -49,6 +49,11 @@ public class TrafficLights implements TrafficLightsInterface {
         return roads.removeIf(r -> r.getName().equals(road));
     }
 
+    @Override
+    public void initialize(int roadCapacity, int interval) {
+
+    }
+
 
     public void notifySecondPassed() {
         roads.forEach(Road::countDown);
