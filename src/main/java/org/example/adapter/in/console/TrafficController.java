@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.example.hexagon.application.IOHandler;
 import org.example.hexagon.domain.Choice;
-import org.example.hexagon.domain.TrafficCoordinator;
+import org.example.hexagon.domain.RoadCoordinator;
 import org.example.hexagon.application.port.SystemTimerInterface;
-public class MainMenuController {
+public class TrafficController {
 
     public static final String EXPECTED_INPUT = "[0-3]";
     private static final String MENU_TEXT = """
@@ -18,12 +18,12 @@ public class MainMenuController {
             0. Quit""";
 
     private final IOHandler ioHandler;
-    private final TrafficCoordinator trafficCoordinator;
+    private final RoadCoordinator roadCoordinator;
     private final SystemTimerInterface systemTimer;
 
-    public MainMenuController(IOHandler ioHandler, TrafficCoordinator trafficCoordinator, SystemTimerInterface systemTimer) {
+    public TrafficController(IOHandler ioHandler, RoadCoordinator roadCoordinator, SystemTimerInterface systemTimer) {
         this.ioHandler = ioHandler;
-        this.trafficCoordinator = trafficCoordinator;
+        this.roadCoordinator = roadCoordinator;
         this.systemTimer = systemTimer;
     }
 
@@ -59,7 +59,7 @@ public class MainMenuController {
     private void addRoad() {
         ioHandler.print("Input road name:");
         var road = ioHandler.readLine();
-        boolean added = trafficCoordinator.addRoad(road);
+        boolean added = roadCoordinator.addRoad(road);
         if (added) {
             ioHandler.printAndWait(road + " added");
         } else {
@@ -70,7 +70,7 @@ public class MainMenuController {
     private void deleteRoad() {
         ioHandler.print("Input road name to delete:");
         var road = ioHandler.readLine();
-        boolean deleted = trafficCoordinator.deleteRoad(road);
+        boolean deleted = roadCoordinator.deleteRoad(road);
         if (deleted) {
             ioHandler.printAndWait(road + " deleted");
         } else {

@@ -1,9 +1,9 @@
 package org.example;
 
 import org.example.hexagon.application.DisplayTask;
-import org.example.adapter.in.console.MainMenuController;
+import org.example.adapter.in.console.TrafficController;
 import org.example.hexagon.application.IOHandler;
-import org.example.hexagon.domain.TrafficCoordinator;
+import org.example.hexagon.domain.RoadCoordinator;
 import org.example.hexagon.application.SystemTimer;
 import org.example.hexagon.application.port.SystemTimerInterface;
 
@@ -21,11 +21,11 @@ public class Main {
         int roadCapacity = queryNumber("Input the number of roads:", ioHandler);
         int interval = queryNumber("Input the interval:", ioHandler);
 
-        TrafficCoordinator trafficCoordinator = new TrafficCoordinator(roadCapacity, interval);
+        RoadCoordinator roadCoordinator = new RoadCoordinator(roadCapacity, interval);
         DisplayTask displayTask = new DisplayTask(ioHandler);
-        SystemTimerInterface systemTimer = new SystemTimer(trafficCoordinator, displayTask);
+        SystemTimerInterface systemTimer = new SystemTimer(roadCoordinator, displayTask);
 
-        new MainMenuController(ioHandler, trafficCoordinator, systemTimer).start();
+        new TrafficController(ioHandler, roadCoordinator, systemTimer).start();
     }
 
     private static int queryNumber(String queryMessage, IOHandler ioHandler) {
