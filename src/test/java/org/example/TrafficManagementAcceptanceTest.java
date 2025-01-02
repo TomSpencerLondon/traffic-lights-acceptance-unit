@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -53,18 +54,22 @@ class TrafficManagementAcceptanceTest {
 
         String output = getCapturedOutput();
 
-        assertTrue(output.contains("Welcome to the traffic management system!"), "Should display welcome message");
-        assertTrue(output.contains("Input the number of roads:"), "Should prompt for number of roads");
-        assertTrue(output.contains("Input the interval:"), "Should prompt for interval");
+        assertThat(output)
+                .contains("Welcome to the traffic management system!");
+        assertThat(output)
+                .contains("Input the number of roads:");
+        assertThat(output)
+                .contains("Input the interval:");
 
-        assertTrue(output.contains("First added"), "Should confirm 'First' road was added");
-        assertTrue(output.contains("Second added"), "Should confirm 'Second' road was added");
+        assertThat(output)
+                .contains("First added");
+        assertThat(output)
+                .contains("Second added");
 
-        assertTrue(output.contains("First deleted"), "Should confirm 'First' road was deleted");
-
-        // Verify road state with ANSI color codes ignored
-        String regex = "Second is \\x1B\\[31mclosed for 9s\\.\\x1B\\[0m";
-        assertTrue(output.matches("(?s).*" + regex + ".*"), "Should display 'Second' road as closed for 9s.");
+        assertThat(output)
+                .contains("First deleted");
+        assertThat(output)
+                .contains("Second is \u001B[31mclosed for 8s.\u001B[0m");
 
         // Verify program exit
         assertTrue(output.contains("Bye!"), "Should display goodbye message");

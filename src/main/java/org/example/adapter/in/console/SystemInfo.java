@@ -19,9 +19,9 @@ public class SystemInfo {
 
     public String formatSystemInfo() {
         return String.format(
-                "! %ds. have passed since system startup !\n\n%s\n\n! Press \"Enter\" to open menu !\n",
+                "! %ds. have passed since system startup !\n\n%s\n! Press \"Enter\" to open menu !\n",
                 secondsPassed,
-                roadInfos.stream().map(RoadInfo::text).collect(Collectors.joining("\n"))
+                roadInfos.stream().map(RoadInfo::text).collect(Collectors.joining())
         );
     }
 }

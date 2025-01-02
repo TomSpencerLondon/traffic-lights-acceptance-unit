@@ -29,6 +29,6 @@ public class RoadInfo {
     }
 
     public String text() {
-        return "%s is %s%s for %ds.%s".formatted(name, color, state, timeRemaining, normal);
+        return "%s is %s%s for %ds.%s\n".formatted(name, color, state, timeRemaining, normal);
     }
 }
