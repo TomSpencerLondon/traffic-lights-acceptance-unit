@@ -5,8 +5,11 @@ import java.util.Map;
 
 import org.example.hexagon.application.IOHandler;
 import org.example.hexagon.domain.Choice;
+import org.example.hexagon.domain.DuplicateRoadException;
 import org.example.hexagon.domain.RoadCoordinator;
 import org.example.hexagon.application.port.SystemTimerInterface;
+import org.example.hexagon.domain.RoadNotFoundException;
+
 public class TrafficController {
 
     public static final String EXPECTED_INPUT = "[0-3]";
@@ -59,29 +62,35 @@ public class TrafficController {
     private void addRoad() {
         ioHandler.print("Input road name:");
         var road = ioHandler.readLine();
-        boolean added = roadCoordinator.addRoad(road);
-        if (added) {
-            ioHandler.printAndWait(road + " added");
-        } else {
+
+        try {
+            roadCoordinator.addRoad(road);
+        } catch (DuplicateRoadException e) {
             ioHandler.printAndWait("Failed to add " + road);
         }
+
+        ioHandler.printAndWait(road + " added");
     }
 
     private void deleteRoad() {
         ioHandler.print("Input road name to delete:");
         var road = ioHandler.readLine();
-        boolean deleted = roadCoordinator.deleteRoad(road);
-        if (deleted) {
-            ioHandler.printAndWait(road + " deleted");
-        } else {
+
+        try {
+            roadCoordinator.deleteRoad(road);
+        } catch (RoadNotFoundException e) {
             ioHandler.printAndWait("Failed to delete " + road);
         }
+
+        ioHandler.printAndWait(road + " deleted");
     }
 
     private void openSystem() {
         systemTimer.setInSystemState(true);
-        String systemInfo = systemTimer.getSystemInfo();
-        ioHandler.print(systemInfo);
+
+        SystemInfo systemInfo = new SystemInfo(systemTimer.getSecondsPassed(), roadCoordinator);
+        ioHandler.print(systemInfo.formatSystemInfo());
+
         ioHandler.readLine();
         systemTimer.setInSystemState(false);
     }

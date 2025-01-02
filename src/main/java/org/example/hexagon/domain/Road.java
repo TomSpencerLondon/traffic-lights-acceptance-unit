@@ -1,25 +1,28 @@
 package org.example.hexagon.domain;
 
 public class Road {
-
     private final String name;
-    private final Countdown countdown;
 
-    public Road(String name, Countdown countdown) {
+    public Road(String name) {
         this.name = name;
-        this.countdown = countdown;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public void countDown(int totalTimeForAllRoads) {
-        countdown.decrement(totalTimeForAllRoads);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Road road = (Road) o;
+
+        return name.equals(road.name);
     }
 
-    public String getState(int interval) {
-        return countdown.getState(interval, name);
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
-
 }

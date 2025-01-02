@@ -1,5 +1,6 @@
 package org.example.hexagon.application;
 
+import org.example.adapter.in.console.SystemInfo;
 import org.example.hexagon.application.port.SystemTimerInterface;
 import org.example.hexagon.application.port.SystemUpdateListener;
 import org.example.hexagon.domain.RoadCoordinator;
@@ -35,20 +36,18 @@ public class SystemTimer implements SystemTimerInterface {
         }
     }
 
+    public int getSecondsPassed() {
+        return secondsPassed;
+    }
+
     private void notifyListener() {
-        String systemInfo = getSystemInfo();
+        SystemInfo systemInfo = new SystemInfo(secondsPassed, roadCoordinator);
         listener.onSystemUpdate(secondsPassed, systemInfo);
     }
 
     @Override
     public void setInSystemState(boolean inSystemState) {
         this.inSystemState = inSystemState;
-    }
-
-    @Override
-    public String getSystemInfo() {
-        return String.format("! %ds. have passed since system startup !\n! Number of roads: %d !\n! Interval: %d !\n\n%s\n\n! Press \"Enter\" to open menu !",
-                secondsPassed, roadCoordinator.getRoadCapacity(), roadCoordinator.getInterval(), roadCoordinator.getRoadsLines());
     }
 
     @Override

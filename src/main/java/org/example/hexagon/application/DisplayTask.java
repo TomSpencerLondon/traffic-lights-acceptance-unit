@@ -1,5 +1,6 @@
 package org.example.hexagon.application;
 
+import org.example.adapter.in.console.SystemInfo;
 import org.example.hexagon.application.port.SystemUpdateListener;
 
 import java.io.IOException;
@@ -13,9 +14,9 @@ public class DisplayTask implements SystemUpdateListener {
     }
 
     @Override
-    public void onSystemUpdate(int secondsPassed, String systemInfo) {
+    public void onSystemUpdate(int secondsPassed, SystemInfo systemInfo) {
         try {
-            ioHandler.clearAndPrint(systemInfo);
+            ioHandler.clearAndPrint(systemInfo.formatSystemInfo());
         } catch (IOException | InterruptedException e) {
             handleException(e);
         }

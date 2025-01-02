@@ -1,52 +1,63 @@
 package org.example.hexagon.domain;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RoadCoordinator {
 
-    private final List<Road> roads = new ArrayList<>();
-    private final int roadCapacity;
+    private final Map<Road, TrafficLight> trafficLights;
+
+    private final int capacity;
     private final int interval;
-    private int remainingInInterval;
+    private int currentSize;
 
-    public RoadCoordinator(int roadCapacity, int interval) {
-        this.roadCapacity = roadCapacity;
+    public RoadCoordinator(int capacity, int interval) {
+        this.capacity = capacity;
         this.interval = interval;
+        this.trafficLights = new HashMap<>();
+        this.currentSize = 0;
     }
 
-    public int getRoadCapacity() {
-        return roadCapacity;
+    public List<RoadState> getRoads() {
+        return trafficLights.entrySet()
+                .stream()
+                .map(entry -> new RoadState(entry.getKey(), entry.getValue().state(), entry.getValue().secondsRemaining()))
+                .collect(Collectors.toList());
     }
 
-    public int getInterval() {
-        return interval;
-    }
+    public void addRoad(String name) {
+        Road key = new Road(name);
 
-    public String getRoadsLines() {
-        return roads.stream().map(road -> road.getState(interval)).collect(Collectors.joining("\n"));
-    }
-
-    public boolean addRoad(String name) {
-        if (roads.size() == roadCapacity) {
-            return false;
+        if (trafficLights.containsKey(key)) {
+            throw new DuplicateRoadException();
         }
-        if (roads.isEmpty()) {
-            remainingInInterval = interval + 1;
+
+        for (Map.Entry<Road, TrafficLight> entry : trafficLights.entrySet()) {
+            entry.getValue().resetSecondsRemaining();
         }
-        roads.add(new Road(name, new Countdown(remainingInInterval + roads.size() * interval)));
-        return true;
+
+        trafficLights.put(key, new TrafficLight(currentSize + 1, interval));
+
+
+        this.currentSize++;
     }
 
-    public boolean deleteRoad(String road) {
-        return roads.removeIf(r -> r.getName().equals(road));
-    }
+    public void deleteRoad(String road) {
+        Road key = new Road(road);
+        if (!trafficLights.containsKey(key)) {
+            throw new RoadNotFoundException();
+        }
 
+        trafficLights.remove(key);
+        this.currentSize--;
+    }
 
     public void notifySecondPassed() {
-        roads.forEach(road -> road.countDown(roads.size() * interval));
-        remainingInInterval = remainingInInterval > 1 ? remainingInInterval - 1 : interval;
+        for (Map.Entry<Road, TrafficLight> entry : trafficLights.entrySet()) {
+            entry.getValue().updateState(currentSize);
+        }
     }
 
 }

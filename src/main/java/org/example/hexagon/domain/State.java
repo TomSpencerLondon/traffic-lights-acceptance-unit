@@ -1,5 +1,5 @@
 package org.example.hexagon.domain;
 
-public enum Signal {
-    RED, GREEN;
+public enum State {
+    OPEN, CLOSED
 }
