@@ -1,7 +1,7 @@
 package org.example.hexagon.application.port;
 
-public interface SystemTimerInterface {
+public interface Clock {
     void setInSystemState(boolean state);
-    void purge();
+    void stop();
     int getSecondsPassed();
 }

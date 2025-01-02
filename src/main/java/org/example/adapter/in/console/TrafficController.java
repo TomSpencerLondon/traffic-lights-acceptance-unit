@@ -1,15 +1,15 @@
 package org.example.adapter.in.console;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.example.hexagon.application.IOHandler;
+import org.example.hexagon.application.port.Clock;
 import org.example.hexagon.domain.Choice;
 import org.example.hexagon.domain.DuplicateRoadException;
 import org.example.hexagon.domain.RoadCoordinator;
-import org.example.hexagon.application.port.SystemTimerInterface;
 import org.example.hexagon.domain.RoadNotFoundException;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TrafficController {
 
@@ -23,41 +23,43 @@ public class TrafficController {
 
     private final IOHandler ioHandler;
     private final RoadCoordinator roadCoordinator;
-    private final SystemTimerInterface systemTimer;
+    private final Clock clock;
+    private final Map<Choice, Runnable> choices;
 
-    public TrafficController(IOHandler ioHandler, RoadCoordinator roadCoordinator, SystemTimerInterface systemTimer) {
+    public TrafficController(IOHandler ioHandler, RoadCoordinator roadCoordinator, Clock clock) {
         this.ioHandler = ioHandler;
         this.roadCoordinator = roadCoordinator;
-        this.systemTimer = systemTimer;
+        this.clock = clock;
+        this.choices = Map.of(
+                Choice.ADD_ROAD, this::addRoad,
+                Choice.DELETE_ROAD, this::deleteRoad,
+                Choice.OPEN_SYSTEM, this::openSystem
+        );
     }
 
     public void start() {
         try {
-            mainMenuLoop();
+            menuLoop();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        systemTimer.purge();
+        clock.stop();
         ioHandler.print("Bye!");
     }
 
-    private void mainMenuLoop() throws IOException, InterruptedException {
+    private void menuLoop() throws IOException, InterruptedException {
         Choice choice;
         do {
-            choice = getMenuChoice();
-            Runnable action = getMenuAction(choice);
+            choice = menuChoice();
+            Runnable action = menuAction(choice);
             if (action != null) {
                 action.run();
             }
         } while (choice != Choice.QUIT);
     }
 
-    private Runnable getMenuAction(Choice choice) {
-        return Map.<Choice, Runnable>of(
-                Choice.ADD_ROAD, this::addRoad,
-                Choice.DELETE_ROAD, this::deleteRoad,
-                Choice.OPEN_SYSTEM, this::openSystem
-        ).get(choice);
+    private Runnable menuAction(Choice choice) {
+        return choices.get(choice);
     }
 
     private void addRoad() {
@@ -87,18 +89,18 @@ public class TrafficController {
     }
 
     private void openSystem() {
-        systemTimer.setInSystemState(true);
+        clock.setInSystemState(true);
 
-        SystemInfo systemInfo = new SystemInfo(systemTimer.getSecondsPassed(), roadCoordinator.getRoads().stream()
+        SystemInfo systemInfo = new SystemInfo(clock.getSecondsPassed(), roadCoordinator.getRoads().stream()
                 .map(RoadInfo::from)
                 .collect(Collectors.toList()));
         ioHandler.print(systemInfo.formatSystemInfo());
 
         ioHandler.readLine();
-        systemTimer.setInSystemState(false);
+        clock.setInSystemState(false);
     }
 
-    private Choice getMenuChoice() throws IOException, InterruptedException {
+    private Choice menuChoice() throws IOException, InterruptedException {
         ioHandler.clearAndPrint(MENU_TEXT);
         return Choice.values()[ioHandler.readValidatedInteger(EXPECTED_INPUT, this::handleInvalidChoice)];
     }

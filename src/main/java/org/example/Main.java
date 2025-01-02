@@ -1,11 +1,11 @@
 package org.example;
 
-import org.example.hexagon.application.DisplayTask;
+import org.example.hexagon.application.OutputRefresher;
 import org.example.adapter.in.console.TrafficController;
 import org.example.hexagon.application.IOHandler;
 import org.example.hexagon.domain.RoadCoordinator;
-import org.example.hexagon.application.SystemTimer;
-import org.example.hexagon.application.port.SystemTimerInterface;
+import org.example.hexagon.application.TimeTracker;
+import org.example.hexagon.application.port.Clock;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -21,10 +21,10 @@ public class Main {
         int roadCapacity = queryNumber("Input the number of roads:", ioHandler);
         int interval = queryNumber("Input the interval:", ioHandler);
 
-        RoadCoordinator roadCoordinator = new RoadCoordinator(roadCapacity, interval);
-        DisplayTask displayTask = new DisplayTask(ioHandler);
-        SystemTimerInterface systemTimer = new SystemTimer(roadCoordinator, displayTask);
+        OutputRefresher outputRefresher = new OutputRefresher(ioHandler);
 
+        RoadCoordinator roadCoordinator = new RoadCoordinator(roadCapacity, interval);
+        Clock systemTimer = new TimeTracker(roadCoordinator, outputRefresher);
         new TrafficController(ioHandler, roadCoordinator, systemTimer).start();
     }
 

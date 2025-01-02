@@ -2,7 +2,7 @@ package org.example.hexagon.application;
 
 import org.example.adapter.in.console.RoadInfo;
 import org.example.adapter.in.console.SystemInfo;
-import org.example.hexagon.application.port.SystemTimerInterface;
+import org.example.hexagon.application.port.Clock;
 import org.example.hexagon.application.port.SystemUpdateListener;
 import org.example.hexagon.domain.RoadCoordinator;
 
@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 
-public class SystemTimer implements SystemTimerInterface {
+public class TimeTracker implements Clock {
 
     private final RoadCoordinator roadCoordinator;
     private final Timer timer;
@@ -19,7 +19,7 @@ public class SystemTimer implements SystemTimerInterface {
     private boolean inSystemState = false;
     private int secondsPassed;
 
-    public SystemTimer(RoadCoordinator roadCoordinator, SystemUpdateListener listener) {
+    public TimeTracker(RoadCoordinator roadCoordinator, SystemUpdateListener listener) {
         this.roadCoordinator = roadCoordinator;
         this.listener = listener;
         this.timer = new Timer("QueueThread", true);
@@ -57,7 +57,7 @@ public class SystemTimer implements SystemTimerInterface {
     }
 
     @Override
-    public void purge() {
+    public void stop() {
         timer.cancel();
         timer.purge();
     }

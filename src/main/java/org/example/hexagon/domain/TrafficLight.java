@@ -19,6 +19,10 @@ public class TrafficLight {
         return secondsRemaining;
     }
 
+    public State state() {
+        return state;
+    }
+
     public void updateState(int lastPosition) {
         this.secondsRemaining--;
 
@@ -29,12 +33,12 @@ public class TrafficLight {
         }
     }
 
-    private boolean isTimeToCheckState() {
-        return secondsRemaining % interval == 0;
+    public void resetSecondsRemaining() {
+        this.secondsRemaining = calculateDelay();
     }
 
-    public State state() {
-        return state;
+    private boolean isTimeToCheckState() {
+        return secondsRemaining % interval == 0;
     }
 
     private int calculateDelay() {
@@ -43,9 +47,5 @@ public class TrafficLight {
         }
 
         return (position - 1) * interval;
-    }
-
-    public void resetSecondsRemaining() {
-        this.secondsRemaining = calculateDelay();
     }
 }
