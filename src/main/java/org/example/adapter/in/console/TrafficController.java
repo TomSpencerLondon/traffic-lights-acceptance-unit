@@ -2,6 +2,7 @@ package org.example.adapter.in.console;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.example.hexagon.application.IOHandler;
 import org.example.hexagon.domain.Choice;
@@ -88,7 +89,9 @@ public class TrafficController {
     private void openSystem() {
         systemTimer.setInSystemState(true);
 
-        SystemInfo systemInfo = new SystemInfo(systemTimer.getSecondsPassed(), roadCoordinator);
+        SystemInfo systemInfo = new SystemInfo(systemTimer.getSecondsPassed(), roadCoordinator.getRoads().stream()
+                .map(RoadInfo::from)
+                .collect(Collectors.toList()));
         ioHandler.print(systemInfo.formatSystemInfo());
 
         ioHandler.readLine();
