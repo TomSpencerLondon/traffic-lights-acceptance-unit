@@ -6,20 +6,20 @@ import java.util.Scanner;
 
 public class IOHandler {
 
-    private final PrintStream out;
+    private final Printer printer;
     private final Scanner scanner;
 
-    public IOHandler(PrintStream out, Scanner scanner) {
-        this.out = out;
+    public IOHandler(Printer printer, Scanner scanner) {
+        this.printer = printer;
         this.scanner = scanner;
     }
 
     public void print(String message) {
-        out.println(message);
+        printer.print(message);
     }
 
     public void printAndWait(String message) {
-        out.println(message);
+        printer.print(message);
         if (scanner.hasNextLine()) {
             scanner.nextLine();
         }
@@ -28,6 +28,11 @@ public class IOHandler {
     public void clearAndPrint(String message) throws IOException, InterruptedException {
         clear();
         print(message);
+    }
+
+    public void clearAndPrintMenu() throws IOException, InterruptedException {
+        clear();
+        printer.printMenu();
     }
 
     public String readLine() {
